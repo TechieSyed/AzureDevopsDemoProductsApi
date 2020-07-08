@@ -1,0 +1,34 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productsapi-deployment
+  labels:
+    app: productsapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: productsapi	  
+  template:
+    metadata:
+      labels:
+        app: productsapi
+    spec:
+      containers:
+      - name: productsapi
+        image: devopsdemoacr77.azurecr.io/azuredevopsdemoproductsapiimage
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: devopsdemoacrsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: productsapiservice
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: productsapi
